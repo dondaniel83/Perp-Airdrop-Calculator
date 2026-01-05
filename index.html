@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculador de Puntos para Airdrops en Perp DEX</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; background: #f4f4f4; color: #333; }
+        h1 { text-align: center; }
+        .calculator { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        label { display: block; margin: 10px 0 5px; }
+        select, input { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 4px; }
+        #results { margin-top: 20px; padding: 15px; background: #e9ffe9; border: 1px solid #ccc; border-radius: 4px; }
+        .tips { margin-top: 30px; }
+        .tips ul { list-style-type: disc; padding-left: 20px; }
+        footer { text-align: center; margin-top: 20px; font-size: 0.8em; color: #777; }
+    </style>
+</head>
+<body>
+    <h1>Calculador de Puntos para Airdrops en Perp DEX</h1>
+    <p>Estima tus ganancias potenciales en airdrops de proyectos de perpetuos descentralizados. Elige un proyecto y ajusta los valores. Esto es solo una estimación hipotética, no consejo financiero.</p>
+    
+    <div class="calculator">
+        <label for="project">Proyecto:</label>
+        <select id="project" onchange="updatePool()">
+            <option value="50000000">Hyperliquid (pool estimado: 50M puntos)</option>
+            <option value="100000000">Paradex (pool estimado: 100M puntos)</option>
+            <option value="200000000">Lighter (pool estimado: 200M puntos)</option>
+            <option value="150000000">Pacifica (pool estimado: 150M puntos)</option>
+            <option value="80000000">EdgeX (pool estimado: 80M puntos)</option>
+        </select>
+        
+        <label for="marketCap">Capitalización de mercado esperada al lanzamiento (en billones USD):</label>
+        <select id="marketCap">
+            <option value="0.5">0.5B</option>
+            <option value="1">1B</option>
+            <option value="1.5" selected>1.5B</option>
+            <option value="2">2B</option>
+            <option value="5">5B</option>
+        </select>
+        
+        <label for="userPoints">Puntos totales que has ganado:</label>
+        <input type="number" id="userPoints" value="100" min="0">
+        
+        <label for="airdropPercent">Porcentaje de FDV asignado al airdrop:</label>
+        <select id="airdropPercent">
+            <option value="0.05">5%</option>
+            <option value="0.15" selected>15%</option>
+            <option value="0.25">25%</option>
+            <option value="0.50">50%</option>
+        </select>
+        
+        <div id="results">
+            <p>Valor estimado: <span id="estimatedValue">$0</span></p>
+            <p>Valor por punto: <span id="pointValue">$0</span></p>
+            <p>Tu participación: <span id="share">0%</span></p>
+        </div>
+    </div>
+    
+    <div class="tips">
+        <h2>Consejos para maximizar puntos</h2>
+        <ul>
+            <li>Usa órdenes limit para ganar como maker.</li>
+            <li>Aumenta volumen con leverage (con cuidado).</li>
+            <li>Trade en activos niche o de bajo volumen.</li>
+            <li>Mantén actividad consistente.</li>
+            <li>Diversifica en múltiples plataformas.</li>
+        </ul>
+        <p>Recuerda: El trading con leverage es riesgoso. Usa solo lo que puedas perder.</p>
+    </div>
+    
+    <footer>Hecho con ❤️ por un amigo de Grok. Actualiza los pools y proyectos según info real.</footer>
+
+    <script>
+        const projects = document.getElementById('project');
+        const marketCap = document.getElementById('marketCap');
+        const userPoints = document.getElementById('userPoints');
+        const airdropPercent = document.getElementById('airdropPercent');
+        const estimatedValue = document.getElementById('estimatedValue');
+        const pointValue = document.getElementById('pointValue');
+        const share = document.getElementById('share');
+
+        function updatePool() {
+            calculate();
+        }
+
+        function calculate() {
+            const totalPool = parseFloat(projects.value);
+            const mc = parseFloat(marketCap.value) * 1000000000; // Billones a USD
+            const up = parseFloat(userPoints.value) || 0;
+            const ap = parseFloat(airdropPercent.value);
+            
+            const airdropAllocation = mc * ap;
+            const userShare = (up / totalPool) * 100;
+            const value = (up / totalPool) * airdropAllocation;
+            const pv = value / up || 0;
+            
+            estimatedValue.textContent = `$${value.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            pointValue.textContent = `$${pv.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            share.textContent = `${userShare.toFixed(6)}%`;
+        }
+
+        // Calcular al cambiar cualquier input
+        [projects, marketCap, userPoints, airdropPercent].forEach(el => el.addEventListener('input', calculate));
+        calculate(); // Inicial
+    </script>
+</body>
+</html>
