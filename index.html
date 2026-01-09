@@ -1,108 +1,424 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculador de Puntos para Airdrops en Perp DEX</title>
+    <title>Perp DEX Airdrop Tracker</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; background: #f4f4f4; color: #333; }
-        h1 { text-align: center; }
-        .calculator { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        label { display: block; margin: 10px 0 5px; }
-        select, input { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 4px; }
-        #results { margin-top: 20px; padding: 15px; background: #e9ffe9; border: 1px solid #ccc; border-radius: 4px; }
-        .tips { margin-top: 30px; }
-        .tips ul { list-style-type: disc; padding-left: 20px; }
-        footer { text-align: center; margin-top: 20px; font-size: 0.8em; color: #777; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 20px; background: #f4f4f4; color: #333; }
+        h1 { text-align: center; margin-bottom: 20px; font-size: 3em; color: #007bff; font-weight: 700; }
+        .subtitle { text-align: center; margin-bottom: 40px; font-size: 1.2em; color: #555; }
+
+        .main-section {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            max-width: 1800px;
+            margin: 0 auto 40px;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .total-net-container {
+            text-align: center;
+            flex: 1;
+        }
+        .total-net-box {
+            display: inline-block;
+            background: linear-gradient(135deg, #155724, #1e7e34);
+            color: white;
+            padding: 18px 35px;
+            border-radius: 16px;
+            font-size: 2em;
+            font-weight: bold;
+            box-shadow: 0 8px 20px rgba(21, 87, 36, 0.3);
+            min-width: 450px;
+        }
+
+        .reset-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .reset-btn:hover {
+            background: #c82333;
+            transform: scale(1.05);
+        }
+
+        .intro-text {
+            text-align: center;
+            font-size: 1.1em;
+            color: #444;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95em;
+        }
+
+        th {
+            background: #007bff;
+            color: white;
+            padding: 14px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+
+        td {
+            padding: 15px 8px;
+            border-bottom: 1px solid #eee;
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        .project-cell {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 15px;
+            padding-left: 20px;
+        }
+        .project-cell img {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+        .project-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .project-name {
+            font-weight: 600;
+            font-size: 1.1em;
+            color: #007bff;
+        }
+        .trade-btn {
+            margin-top: 6px;
+            padding: 6px 12px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 0.85em;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .input-group label {
+            font-size: 0.85em;
+            color: #555;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            text-align: center;
+            -moz-appearance: textfield;
+            font-size: 0.95em;
+        }
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .medal {
+            font-size: 1.4em;
+            margin-left: 10px;
+        }
+
+        .positive { color: #28a745; font-weight: bold; }
+        .negative { color: #dc3545; font-weight: bold; }
+
+        .tips {
+            margin-top: 60px;
+            padding: 30px;
+            background: #fff3cd;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .footer-extra {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 1em;
+            color: #555;
+        }
+
+        .disclaimer {
+            font-size: 0.9em;
+            color: #777;
+            margin-bottom: 20px;
+        }
+
+        .visits-counter {
+            font-family: 'Courier New', monospace;
+            font-size: 1.4em;
+            color: #007bff;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .x-icon {
+            font-size: 2em;
+            color: #000;
+            margin-top: 20px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        footer { text-align: center; margin-top: 60px; font-size: 0.9em; color: #777; }
     </style>
 </head>
 <body>
-    <h1>Calculador de Puntos para Airdrops en Perp DEX</h1>
-    <p>Estima tus ganancias potenciales en airdrops de proyectos de perpetuos descentralizados. Elige un proyecto y ajusta los valores. Esto es solo una estimación hipotética, no consejo financiero.</p>
+    <h1>Perp DEX Airdrop Tracker</h1>
+    <p class="subtitle">The ultimate tool to track points, PNL and estimate net airdrop rewards</p>
     
-    <div class="calculator">
-        <label for="project">Proyecto:</label>
-        <select id="project" onchange="updatePool()">
-            <option value="50000000">Hyperliquid (pool estimado: 50M puntos)</option>
-            <option value="100000000">Paradex (pool estimado: 100M puntos)</option>
-            <option value="200000000">Lighter (pool estimado: 200M puntos)</option>
-            <option value="150000000">Pacifica (pool estimado: 150M puntos)</option>
-            <option value="80000000">EdgeX (pool estimado: 80M puntos)</option>
-        </select>
-        
-        <label for="marketCap">Capitalización de mercado esperada al lanzamiento (en billones USD):</label>
-        <select id="marketCap">
-            <option value="0.5">0.5B</option>
-            <option value="1">1B</option>
-            <option value="1.5" selected>1.5B</option>
-            <option value="2">2B</option>
-            <option value="5">5B</option>
-        </select>
-        
-        <label for="userPoints">Puntos totales que has ganado:</label>
-        <input type="number" id="userPoints" value="100" min="0">
-        
-        <label for="airdropPercent">Porcentaje de FDV asignado al airdrop:</label>
-        <select id="airdropPercent">
-            <option value="0.05">5%</option>
-            <option value="0.15" selected>15%</option>
-            <option value="0.25">25%</option>
-            <option value="0.50">50%</option>
-        </select>
-        
-        <div id="results">
-            <p>Valor estimado: <span id="estimatedValue">$0</span></p>
-            <p>Valor por punto: <span id="pointValue">$0</span></p>
-            <p>Tu participación: <span id="share">0%</span></p>
+    <div class="main-section">
+        <div class="header-container">
+            <div></div> <!-- Espacio vacío a la izquierda -->
+            <div class="total-net-container">
+                <div class="total-net-box" id="totalNet">$0</div>
+            </div>
+            <button class="reset-btn" id="resetBtn">🔄 Reset All</button>
         </div>
+
+        <p class="intro-text">
+            Adjust values for each project. Net airdrop includes your full PNL (positive or negative). All data saved locally in your browser.
+        </p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Project</th>
+                    <th>Points Pool</th>
+                    <th>% Airdrop</th>
+                    <th>FDV (B)</th>
+                    <th>Points</th>
+                    <th>PNL ($)</th>
+                    <th>Cost per Point</th>
+                    <th>Value per Point</th>
+                    <th>Net per Point</th>
+                    <th>Net Airdrop</th>
+                </tr>
+            </thead>
+            <tbody id="projectsTable"></tbody>
+        </table>
     </div>
-    
+
     <div class="tips">
-        <h2>Consejos para maximizar puntos</h2>
-        <ul>
-            <li>Usa órdenes limit para ganar como maker.</li>
-            <li>Aumenta volumen con leverage (con cuidado).</li>
-            <li>Trade en activos niche o de bajo volumen.</li>
-            <li>Mantén actividad consistente.</li>
-            <li>Diversifica en múltiples plataformas.</li>
+        <h2>Pro Tips</h2>
+        <ul style="text-align: left; max-width: 800px; margin: 0 auto;">
+            <li>Use limit orders to earn maker rewards</li>
+            <li>Diversify your volume across multiple platforms</li>
+            <li>Track your PNL honestly to see real net profit</li>
+            <li>If you like this tool and want to support the content, feel free to use any of the "Trade" links above — they all include my referral (helps me a lot at no extra cost to you 😎)</li>
         </ul>
-        <p>Recuerda: El trading con leverage es riesgoso. Usa solo lo que puedas perder.</p>
+        <p style="margin-top: 30px;"><strong>Warning:</strong> Leverage trading is high risk. Only use capital you can afford to lose.</p>
     </div>
-    
-    <footer>Hecho con ❤️ por un amigo de Grok. Actualiza los pools y proyectos según info real.</footer>
+
+    <div class="footer-extra">
+        <p class="disclaimer">Disclaimer. The information provided on this website is for informational purposes only. Always do your own research before using any cryptocurrency exchange.</p>
+        <div class="visits-counter" id="visitCounter">Visits: Loading...</div>
+        <a href="https://x.com/CaravaggioMr" target="_blank" class="x-icon">X</a>
+    </div>
+
+    <footer>Made with ❤️ by Grok for a true degen • All your data is saved in your browser</footer>
 
     <script>
-        const projects = document.getElementById('project');
-        const marketCap = document.getElementById('marketCap');
-        const userPoints = document.getElementById('userPoints');
-        const airdropPercent = document.getElementById('airdropPercent');
-        const estimatedValue = document.getElementById('estimatedValue');
-        const pointValue = document.getElementById('pointValue');
-        const share = document.getElementById('share');
+        const projects = [
+            { name: "Extended", logo: "logos/extended.png", trade: "https://app.extended.exchange?ref=TU_REFERRAL", pool: 50000000, fdv: 1.5, percent: 15 },
+            { name: "Bullpen", logo: "logos/bullpen.png", trade: "https://app.bullpem.fi?ref=TU_REFERRAL", pool: 69900000, fdv: 1.5, percent: 15 },
+            { name: "Pacifica", logo: "logos/pacifica.png", trade: "https://app.pacificadex.com?ref=TU_REFERRAL", pool: 24000000, fdv: 1.5, percent: 15 },
+            { name: "Based", logo: "logos/based.png", trade: "https://app.basedperp.org?ref=TU_REFERRAL", pool: 50000000, fdv: 1.5, percent: 15 },
+            { name: "Variational", logo: "logos/variational.png", trade: "https://omni.variational.io?ref=TU_REFERRAL", pool: 8400000, fdv: 1.5, percent: 15 },
+            { name: "Paradex", logo: "logos/paradex.png", trade: "https://www.paradex.trade?ref=TU_REFERRAL", pool: 350000000, fdv: 1.5, percent: 15 },
+            { name: "NadoHQ", logo: "logos/nadohq.png", trade: "#", pool: 0, fdv: 0, percent: 0 },
+            { name: "EdgeX", logo: "logos/edgex.png", trade: "#", pool: 7311165, fdv: 1, percent: 25 },
+            { name: "Ostium", logo: "logos/ostium.png", trade: "#", pool: 40000000, fdv: 1, percent: 15 },
+            { name: "Vest", logo: "logos/vest.png", trade: "#", pool: 50000000, fdv: 1, percent: 30 },
+            { name: "Cascade", logo: "logos/cascade.png", trade: "#", pool: 2500000, fdv: 1, percent: 15 },
+            { name: "Grvt", logo: "logos/grvt.png", trade: "#", pool: 3000000, fdv: 1, percent: 22 },
+            { name: "Backpack", logo: "logos/backpack.png", trade: "#", pool: 400000000, fdv: 0.7, percent: 10 }
+        ];
 
-        function updatePool() {
-            calculate();
+        let projectData = {};
+
+        function loadData() {
+            const saved = localStorage.getItem('perpTrackerFinalTradeDown');
+            if (saved) {
+                projectData = JSON.parse(saved);
+            } else {
+                resetDefaults();
+            }
+            renderTable();
         }
 
-        function calculate() {
-            const totalPool = parseFloat(projects.value);
-            const mc = parseFloat(marketCap.value) * 1000000000; // Billones a USD
-            const up = parseFloat(userPoints.value) || 0;
-            const ap = parseFloat(airdropPercent.value);
-            
-            const airdropAllocation = mc * ap;
-            const userShare = (up / totalPool) * 100;
-            const value = (up / totalPool) * airdropAllocation;
-            const pv = value / up || 0;
-            
-            estimatedValue.textContent = `$${value.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-            pointValue.textContent = `$${pv.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-            share.textContent = `${userShare.toFixed(6)}%`;
+        function resetDefaults() {
+            projectData = {};
+            projects.forEach(p => {
+                projectData[p.name] = {
+                    pool: p.pool,
+                    fdv: p.fdv,
+                    percent: p.percent,
+                    points: 0,
+                    pnl: 0
+                };
+            });
         }
 
-        // Calcular al cambiar cualquier input
-        [projects, marketCap, userPoints, airdropPercent].forEach(el => el.addEventListener('input', calculate));
-        calculate(); // Inicial
+        function saveData() {
+            localStorage.setItem('perpTrackerFinalTradeDown', JSON.stringify(projectData));
+        }
+
+        function resetAll() {
+            localStorage.removeItem('perpTrackerFinalTradeDown');
+            location.reload();  // Reset directo sin aviso
+        }
+
+        function calculateProject(name) {
+            const d = projectData[name];
+            const pool = d.pool || 1;
+            const mc = d.fdv * 1e9;
+            const gross = d.points > 0 ? (d.points / pool) * mc * (d.percent / 100) : 0;
+            const net = gross + d.pnl;
+
+            const cost = d.points > 0 ? d.pnl / d.points : 0;
+            const vpp = d.points > 0 ? gross / d.points : 0;
+            const netPerPoint = vpp + cost;
+
+            return { net, cost, vpp, netPerPoint };
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('projectsTable');
+            tbody.innerHTML = '';
+
+            const ranked = projects.map(p => ({
+                name: p.name,
+                calc: calculateProject(p.name)
+            })).sort((a, b) => b.calc.net - a.calc.net);
+
+            let totalNet = ranked.reduce((sum, p) => sum + p.calc.net, 0);
+            document.getElementById('totalNet').textContent = `Total Expected Net Profit: $${totalNet.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})}`;
+
+            ranked.forEach((item, index) => {
+                const p = projects.find(pr => pr.name === item.name);
+                const d = projectData[item.name];
+                const calc = item.calc;
+
+                const row = document.createElement('tr');
+
+                const medal = index === 0 ? '👑' : index === 1 ? '🥈' : index === 2 ? '🥉' : `#${index + 1}`;
+
+                row.innerHTML = `
+                    <td class="project-cell">
+                        <img src="${p.logo}" alt="${p.name}">
+                        <div class="project-info">
+                            <div class="project-name">${p.name}</div>
+                            <a href="${p.trade}" target="_blank" class="trade-btn">Trade</a>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="input-group">
+                            <label>Points Pool</label>
+                            <input type="number" class="pool-input" value="${d.pool}" min="1">
+                        </div>
+                    </td>
+                    <td>
+                        <div class="input-group">
+                            <label>% Airdrop</label>
+                            <input type="number" class="percent-input" value="${d.percent}" min="0" max="50" step="1">
+                        </div>
+                    </td>
+                    <td>
+                        <div class="input-group">
+                            <label>FDV (B)</label>
+                            <input type="number" class="fdv-input" value="${d.fdv}" min="0" max="5" step="0.1">
+                        </div>
+                    </td>
+                    <td>
+                        <div class="input-group">
+                            <label>Points</label>
+                            <input type="number" class="points-input" value="${d.points}" min="0">
+                        </div>
+                    </td>
+                    <td>
+                        <div class="input-group">
+                            <label>PNL ($)</label>
+                            <input type="number" class="pnl-input" value="${d.pnl}" step="any">
+                        </div>
+                    </td>
+                    <td class="${calc.cost > 0 ? 'positive' : calc.cost < 0 ? 'negative' : ''}">
+                        ${calc.cost > 0 ? '+' : ''}$${Math.abs(calc.cost).toFixed(4)}
+                    </td>
+                    <td>$${calc.vpp.toFixed(4)}</td>
+                    <td class="${calc.netPerPoint > 0 ? 'positive' : calc.netPerPoint < 0 ? 'negative' : ''}">
+                        ${calc.netPerPoint > 0 ? '+' : ''}$${Math.abs(calc.netPerPoint).toFixed(4)}
+                    </td>
+                    <td style="font-weight: bold; color: ${calc.net > 0 ? '#28a745' : calc.net < 0 ? '#dc3545' : '#333'}">
+                        $${calc.net.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})}
+                        <span class="medal">${medal}</span>
+                    </td>
+                `;
+                tbody.appendChild(row);
+
+                // Eventos con 'change'
+                ['pool-input', 'percent-input', 'fdv-input', 'points-input', 'pnl-input'].forEach(cls => {
+                    const input = row.querySelector('.' + cls);
+                    input.addEventListener('change', e => {
+                        let val = parseFloat(e.target.value);
+                        if (isNaN(val)) val = 0;
+                        if (cls === 'pool-input') val = Math.max(1, val);
+                        if (cls === 'percent-input') val = Math.max(0, Math.min(50, val));
+                        if (cls === 'fdv-input') val = Math.max(0, Math.min(5, val));
+                        projectData[p.name][cls.replace('-input', '')] = val;
+                        saveData();
+                        renderTable();
+                    });
+                });
+            });
+        }
+
+        // Botón de Reset directo (sin aviso)
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            localStorage.removeItem('perpTrackerFinalTradeDown');
+            location.reload();
+        });
+
+        // Contador de visitas
+        let visits = localStorage.getItem('trackerVisits') || 0;
+        visits = parseInt(visits) + 1;
+        localStorage.setItem('trackerVisits', visits);
+        document.getElementById('visitCounter').textContent = `Visits: ${visits.toLocaleString()}`;
+
+        loadData();
     </script>
 </body>
 </html>
