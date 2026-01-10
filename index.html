@@ -116,15 +116,15 @@
             text-align: center;
         }
 
-        /* Inputs de configuración con gris más oscuro */
+        /* Nuevos estilos para inputs "de configuración" (gris claro) */
         .config-input {
-            background-color: #e9ecef !important;
+            background-color: #e9ecef !important;   /* ← este es el que cambiamos */
             border: 1px solid #ced4da;
             color: #495057;
         }
 
         .config-input:focus {
-            background-color: #dee2e6 !important;
+            background-color: #e9ecef !important;
             border-color: #80bdff;
         }
 
@@ -523,6 +523,7 @@
                 `;
                 tbody.appendChild(row);
 
+                // Evento especial para pool
                 row.querySelector('.pool-input').addEventListener('change', e => {
                     let val = parseFloat(e.target.value);
                     if (isNaN(val)) val = 0;
@@ -531,6 +532,7 @@
                     renderTable();
                 });
 
+                // Resto de inputs
                 ['percent-input', 'fdv-input', 'points-input', 'pnl-input'].forEach(cls => {
                     const input = row.querySelector('.' + cls);
                     input.addEventListener('change', e => {
