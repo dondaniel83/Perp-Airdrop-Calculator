@@ -19,7 +19,7 @@ The ultimate browser-based tool to track points, PNL, and estimate net airdrop r
 The information provided on this website is for informational purposes only. Always do your own research before using any cryptocurrency exchange. Leverage trading is high risk. Only use capital you can afford to lose.
 
 ### Made with ❤️
-Created for true degens by CaravaggioMr  
-Follow me on X: https://x.com/CaravaggioMr
+Created for true degens by Danb3l
+Follow me on X: https://x.com/DonJoaquinCrypt
 
 Feel free to share, and use! 🚀
