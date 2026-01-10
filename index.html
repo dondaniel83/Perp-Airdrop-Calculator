@@ -6,9 +6,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perp DEX Airdrop Tracker</title>
     <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 20px; background: #f4f4f4; color: #333; }
-        h1 { text-align: center; margin-bottom: 20px; font-size: 3em; color: #007bff; font-weight: 700; }
-        .subtitle { text-align: center; margin-bottom: 40px; font-size: 1.2em; color: #555; }
+        body { 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            margin: 0; 
+            padding: 20px; 
+            background: #f4f4f4; 
+            color: #333; 
+        }
+        h1 { 
+            text-align: center; 
+            margin-bottom: 20px; 
+            font-size: 3em; 
+            color: #007bff; 
+            font-weight: 700; 
+        }
+        .subtitle { 
+            text-align: center; 
+            margin-bottom: 40px; 
+            font-size: 1.2em; 
+            color: #555; 
+        }
 
         .main-section {
             background: white;
@@ -24,11 +41,14 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
         }
 
         .total-net-container {
             text-align: center;
             flex: 1;
+            min-width: 300px;
         }
         .total-net-box {
             display: inline-block;
@@ -39,7 +59,7 @@
             font-size: 2em;
             font-weight: bold;
             box-shadow: 0 8px 20px rgba(21, 87, 36, 0.3);
-            min-width: 450px;
+            min-width: 320px;
         }
 
         .reset-btn {
@@ -52,9 +72,6 @@
             font-weight: bold;
             cursor: pointer;
             transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
         .reset-btn:hover {
             background: #c82333;
@@ -66,7 +83,15 @@
             font-size: 1.1em;
             color: #444;
             line-height: 1.6;
-            margin-bottom: 30px;
+            margin-bottom: 10px;
+        }
+
+        .disclaimer-text {
+            text-align: center;
+            font-size: 0.95em;
+            color: #666;
+            margin: -10px 0 35px 0;
+            font-style: italic;
         }
 
         table {
@@ -140,7 +165,6 @@
             border: 1px solid #ccc;
             border-radius: 6px;
             text-align: center;
-            -moz-appearance: textfield;
             font-size: 0.95em;
         }
         input[type="number"]::-webkit-outer-spin-button,
@@ -172,29 +196,13 @@
             color: #555;
         }
 
-        .disclaimer {
-            font-size: 0.9em;
-            color: #777;
-            margin-bottom: 20px;
+        footer { 
+            text-align: center; 
+            margin-top: 60px; 
+            font-size: 0.9em; 
+            color: #777; 
         }
 
-        .visits-counter {
-            font-family: 'Courier New', monospace;
-            font-size: 1.4em;
-            color: #007bff;
-            margin: 20px 0;
-            font-weight: bold;
-        }
-
-        .x-icon {
-            font-size: 2em;
-            color: #000;
-            margin-top: 20px;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        footer { text-align: center; margin-top: 60px; font-size: 0.9em; color: #777; }
         .share-btn {
             background: #000;
             color: white;
@@ -205,15 +213,90 @@
             font-weight: bold;
             cursor: pointer;
             transition: all 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 20px;
+            margin-top: 15px;
         }
         .share-btn:hover {
             background: #1a1a1a;
             transform: scale(1.05);
-        }       
+        }
+
+        /* === RESPONSIVE PARA MÓVIL === */
+        @media screen and (max-width: 1024px) {
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
+            
+            thead tr {
+                position: absolute;
+                top: -9999px;
+                left: -9999px;
+            }
+            
+            tr {
+                margin-bottom: 25px;
+                border: 1px solid #ddd;
+                border-radius: 12px;
+                background: white;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            }
+            
+            td {
+                border: none;
+                border-bottom: 1px solid #eee;
+                position: relative;
+                padding-left: 50%;
+                text-align: right;
+            }
+            
+            td:before {
+                position: absolute;
+                top: 12px;
+                left: 15px;
+                width: 45%;
+                padding-right: 10px;
+                white-space: nowrap;
+                content: attr(data-label);
+                text-align: left;
+                font-weight: bold;
+                color: #333;
+            }
+            
+            td:last-child {
+                border-bottom: 0;
+            }
+            
+            .project-cell {
+                text-align: left;
+                padding: 15px;
+                background: #f8f9fa;
+                border-bottom: 1px solid #ddd;
+                border-radius: 12px 12px 0 0;
+            }
+            
+            .total-net-box {
+                font-size: 1.7em;
+                padding: 15px;
+                min-width: auto;
+                width: 100%;
+            }
+            
+            .header-container {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 2.4em;
+            }
+        }
+
+        @media screen and (max-width: 600px) {
+            body {
+                padding: 15px;
+            }
+            .main-section {
+                padding: 20px 12px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -222,11 +305,10 @@
     
     <div class="main-section">
         <div class="header-container">
-            <div></div> <!-- Espacio vacío a la izquierda -->
+            <div></div>
             <div class="total-net-container">
                 <div class="total-net-box" id="totalNet">$0</div>
                 <button class="share-btn" id="shareBtn">📤 Share on X</button>
-                
             </div>
             <button class="reset-btn" id="resetBtn">🔄 Reset All</button>
         </div>
@@ -234,12 +316,16 @@
         <p class="intro-text">
             Adjust values for each project. Net airdrop includes your full PNL (positive or negative). All data saved locally in your browser.
         </p>
+        
+        <p class="disclaimer-text">
+            Project values are estimates and may be outdated or change over time. Use as a rough guide only.
+        </p>
 
         <table>
             <thead>
                 <tr>
                     <th>Project</th>
-                    <th>Points Pool</th>
+                    <th>Points Pool (M)</th>
                     <th>% Airdrop</th>
                     <th>FDV (B)</th>
                     <th>Points</th>
@@ -277,8 +363,8 @@
         const projects = [
             { name: "Extended", logo: "logos/extended.png", trade: "https://app.extended.exchange/join/BABETO", pool: 50000000, fdv: 0.5, percent: 30 },
             { name: "Bullpen", logo: "logos/bullpen.png", trade: "https://bullpen.fi/@bronze-gnu", pool: 69900000, fdv: 0.150, percent: 25 },
-            { name: "Pacifica", logo: "logos/pacifica.png", trade: "https://app.pacifica.fi?referral=caravaggio", pool: 24000000, fdv: 0.5, percent: 15 },
-            { name: "Based", logo: "logos/based.png", trade: "https://app.based.one/r/DONBEBE", pool: 50000000, fdv: 0.3, percent: 20 },
+            { name: "Pacifica", logo: "logos/pacifica.png", trade: "https://app.pacifica.fi?referral=caravaggio", pool: 300000000, fdv: 0.5, percent: 15 },
+            { name: "Based", logo: "logos/based.png", trade: "https://app.based.one/r/DONBEBE", pool: 334000000, fdv: 0.3, percent: 20 },
             { name: "Variational", logo: "logos/variational.png", trade: "https://omni.variational.io", pool: 8400000, fdv: 0.750, percent: 50 },
             { name: "Paradex", logo: "logos/paradex.png", trade: "https://app.paradex.trade/r/insightfulrunner4", pool: 350000000, fdv: 0.5, percent: 20 },
             { name: "NadoHQ", logo: "logos/nadohq.png", trade: "https://app.nado.xyz/perpetuals", pool: 0, fdv: 0, percent: 0 },
@@ -321,7 +407,7 @@
 
         function resetAll() {
             localStorage.removeItem('perpTrackerFinalTradeDown');
-            location.reload();  // Reset directo sin aviso
+            location.reload();
         }
 
         function calculateProject(name) {
@@ -355,69 +441,79 @@
                 const d = projectData[item.name];
                 const calc = item.calc;
 
+                const poolInMillions = d.pool / 1000000;
+
                 const row = document.createElement('tr');
 
                 const medal = index === 0 ? '👑' : index === 1 ? '🥈' : index === 2 ? '🥉' : `#${index + 1}`;
 
                 row.innerHTML = `
-                    <td class="project-cell">
+                    <td class="project-cell" data-label="Project">
                         <img src="${p.logo}" alt="${p.name}">
                         <div class="project-info">
                             <div class="project-name">${p.name}</div>
                             <a href="${p.trade}" target="_blank" class="trade-btn">Trade</a>
                         </div>
                     </td>
-                    <td>
+                    <td data-label="Points Pool (M)">
                         <div class="input-group">
-                            <label>Points Pool</label>
-                            <input type="number" class="pool-input" value="${d.pool}" min="1">
+                            <label>Points Pool (M)</label>
+                            <input type="number" class="pool-input" value="${poolInMillions}" min="0" step="any">
                         </div>
                     </td>
-                    <td>
+                    <td data-label="% Airdrop">
                         <div class="input-group">
                             <label>% Airdrop</label>
                             <input type="number" class="percent-input" value="${d.percent}" min="0" max="50" step="1">
                         </div>
                     </td>
-                    <td>
+                    <td data-label="FDV (B)">
                         <div class="input-group">
                             <label>FDV (B)</label>
                             <input type="number" class="fdv-input" value="${d.fdv}" min="0" max="5" step="0.1">
                         </div>
                     </td>
-                    <td>
+                    <td data-label="Points">
                         <div class="input-group">
                             <label>Points</label>
                             <input type="number" class="points-input" value="${d.points}" min="0">
                         </div>
                     </td>
-                    <td>
+                    <td data-label="PNL ($)">
                         <div class="input-group">
                             <label>PNL ($)</label>
                             <input type="number" class="pnl-input" value="${d.pnl}" step="any">
                         </div>
                     </td>
-                    <td class="${calc.cost > 0 ? 'positive' : calc.cost < 0 ? 'negative' : ''}">
+                    <td data-label="Cost per Point" class="${calc.cost > 0 ? 'positive' : calc.cost < 0 ? 'negative' : ''}">
                         ${calc.cost > 0 ? '+' : ''}$${Math.abs(calc.cost).toFixed(4)}
                     </td>
-                    <td>$${calc.vpp.toFixed(4)}</td>
-                    <td class="${calc.netPerPoint > 0 ? 'positive' : calc.netPerPoint < 0 ? 'negative' : ''}">
+                    <td data-label="Value per Point">$${calc.vpp.toFixed(4)}</td>
+                    <td data-label="Net per Point" class="${calc.netPerPoint > 0 ? 'positive' : calc.netPerPoint < 0 ? 'negative' : ''}">
                         ${calc.netPerPoint > 0 ? '+' : ''}$${Math.abs(calc.netPerPoint).toFixed(4)}
                     </td>
-                    <td style="font-weight: bold; color: ${calc.net > 0 ? '#28a745' : calc.net < 0 ? '#dc3545' : '#333'}">
+                    <td data-label="Net Airdrop" style="font-weight: bold; color: ${calc.net > 0 ? '#28a745' : calc.net < 0 ? '#dc3545' : '#333'}">
                         $${calc.net.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})}
                         <span class="medal">${medal}</span>
                     </td>
                 `;
                 tbody.appendChild(row);
 
-                // Eventos con 'change'
-                ['pool-input', 'percent-input', 'fdv-input', 'points-input', 'pnl-input'].forEach(cls => {
+                // Evento especial para pool (multiplicar x1M)
+                row.querySelector('.pool-input').addEventListener('change', e => {
+                    let val = parseFloat(e.target.value);
+                    if (isNaN(val)) val = 0;
+                    projectData[p.name].pool = val * 1000000;
+                    saveData();
+                    renderTable();
+                });
+
+                // Resto de inputs
+                ['percent-input', 'fdv-input', 'points-input', 'pnl-input'].forEach(cls => {
                     const input = row.querySelector('.' + cls);
                     input.addEventListener('change', e => {
                         let val = parseFloat(e.target.value);
                         if (isNaN(val)) val = 0;
-                        if (cls === 'pool-input') val = Math.max(1, val);
                         if (cls === 'percent-input') val = Math.max(0, Math.min(50, val));
                         if (cls === 'fdv-input') val = Math.max(0, Math.min(5, val));
                         projectData[p.name][cls.replace('-input', '')] = val;
@@ -428,26 +524,22 @@
             });
         }
 
-        // Botón de Reset directo (sin aviso)
         document.getElementById('resetBtn').addEventListener('click', () => {
             localStorage.removeItem('perpTrackerFinalTradeDown');
             location.reload();
         });
 
-        // Contador de visitas
         let visits = localStorage.getItem('trackerVisits') || 0;
         visits = parseInt(visits) + 1;
         localStorage.setItem('trackerVisits', visits);
         document.getElementById('visitCounter').textContent = `Visits: ${visits.toLocaleString()}`;
         
-        // Botón de compartir en X
         document.getElementById('shareBtn').addEventListener('click', () => {
-        const profit = document.getElementById('totalNet').textContent;
-        const url = window.location.href;
-        const text = `My Total Expected Net Profit on Perp DEX Airdrop Tracker is ${profit}! 🚀💰 Check yours: ${url} #Airdrop #PerpDEX #Crypto`;
-    
-        const tweetUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(text)}`;
-        window.open(tweetUrl, '_blank');
+            const profit = document.getElementById('totalNet').textContent;
+            const url = window.location.href;
+            const text = `My Total Expected Net Profit on Perp DEX Airdrop Tracker is ${profit}! 🚀💰 Check yours: ${url} #Airdrop #PerpDEX #Crypto`;
+            const tweetUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(text)}`;
+            window.open(tweetUrl, '_blank');
         });
 
         loadData();
