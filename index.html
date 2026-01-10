@@ -116,6 +116,18 @@
             text-align: center;
         }
 
+        /* Inputs de configuración con gris más oscuro */
+        .config-input {
+            background-color: #e9ecef !important;
+            border: 1px solid #ced4da;
+            color: #495057;
+        }
+
+        .config-input:focus {
+            background-color: #dee2e6 !important;
+            border-color: #80bdff;
+        }
+
         .project-cell {
             display: flex;
             align-items: center;
@@ -189,13 +201,6 @@
             text-align: center;
         }
 
-        .footer-extra {
-            text-align: center;
-            margin-top: 40px;
-            font-size: 1em;
-            color: #555;
-        }
-
         footer { 
             text-align: center; 
             margin-top: 60px; 
@@ -220,7 +225,7 @@
             transform: scale(1.05);
         }
 
-        /* === RESPONSIVE PARA MÓVIL === */
+        /* RESPONSIVE PARA MÓVIL */
         @media screen and (max-width: 1024px) {
             table, thead, tbody, th, td, tr {
                 display: block;
@@ -424,14 +429,33 @@
             return { net, cost, vpp, netPerPoint };
         }
 
+        function isFilled(name) {
+            const d = projectData[name];
+            return d.points > 0 || d.pnl !== 0;
+        }
+
         function renderTable() {
             const tbody = document.getElementById('projectsTable');
             tbody.innerHTML = '';
 
-            const ranked = projects.map(p => ({
+            // Separate filled and unfilled
+            const filledProjects = projects.filter(p => isFilled(p.name));
+            const unfilledProjects = projects.filter(p => !isFilled(p.name));
+
+            // Calculate and sort filled by net descending
+            const filledRanked = filledProjects.map(p => ({
                 name: p.name,
                 calc: calculateProject(p.name)
             })).sort((a, b) => b.calc.net - a.calc.net);
+
+            // Unfilled in original order
+            const unfilledRanked = unfilledProjects.map(p => ({
+                name: p.name,
+                calc: calculateProject(p.name)
+            }));
+
+            // Combine: filled sorted + unfilled
+            const ranked = filledRanked.concat(unfilledRanked);
 
             let totalNet = ranked.reduce((sum, p) => sum + p.calc.net, 0);
             document.getElementById('totalNet').textContent = `Total Expected Net Profit: $${totalNet.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})}`;
@@ -458,19 +482,19 @@
                     <td data-label="Points Pool (M)">
                         <div class="input-group">
                             <label>Points Pool (M)</label>
-                            <input type="number" class="pool-input" value="${poolInMillions}" min="0" step="any">
+                            <input type="number" class="pool-input config-input" value="${poolInMillions}" min="0" step="any">
                         </div>
                     </td>
                     <td data-label="% Airdrop">
                         <div class="input-group">
                             <label>% Airdrop</label>
-                            <input type="number" class="percent-input" value="${d.percent}" min="0" max="50" step="1">
+                            <input type="number" class="percent-input config-input" value="${d.percent}" min="0" max="50" step="1">
                         </div>
                     </td>
                     <td data-label="FDV (B)">
                         <div class="input-group">
                             <label>FDV (B)</label>
-                            <input type="number" class="fdv-input" value="${d.fdv}" min="0" max="5" step="0.1">
+                            <input type="number" class="fdv-input config-input" value="${d.fdv}" min="0" max="5" step="0.1">
                         </div>
                     </td>
                     <td data-label="Points">
@@ -499,7 +523,6 @@
                 `;
                 tbody.appendChild(row);
 
-                // Evento especial para pool (multiplicar x1M)
                 row.querySelector('.pool-input').addEventListener('change', e => {
                     let val = parseFloat(e.target.value);
                     if (isNaN(val)) val = 0;
@@ -508,7 +531,6 @@
                     renderTable();
                 });
 
-                // Resto de inputs
                 ['percent-input', 'fdv-input', 'points-input', 'pnl-input'].forEach(cls => {
                     const input = row.querySelector('.' + cls);
                     input.addEventListener('change', e => {
