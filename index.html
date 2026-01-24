@@ -378,7 +378,10 @@
             { name: "Vest", logo: "logos/vest.png", trade: "https://trade.vestmarkets.com/join/VAGGI", pool: 50000000, fdv: 0.3, percent: 30 },
             { name: "Cascade", logo: "logos/cascade.png", trade: "https://cascade.xyz/login", pool: 2500000, fdv: 1, percent: 15 },
             { name: "Grvt", logo: "logos/grvt.png", trade: "https://grvt.io/", pool: 3000000, fdv: 0.5, percent: 22 },
-            { name: "Backpack", logo: "logos/backpack.png", trade: "https://backpack.exchange/", pool: 400000000, fdv: 0.7, percent: 10 }
+            { name: "Backpack", logo: "logos/backpack.png", trade: "https://backpack.exchange/", pool: 400000000, fdv: 0.7, percent: 10 },
+            { name: "Ethereal", logo: "logos/ethereal.png", trade: "https://app.ethereal.trade/BTCUSD", pool: 6200000000, fdv: 0.3, percent: 20 },
+            { name: "Hibachi", logo: "logos/hibachi.png", trade: "https://hibachi.xyz/r/sephirot", pool: 400000000, fdv: 0.1, percent: 25 },
+        
         ];
 
         let projectData = {};
@@ -386,12 +389,24 @@
         function loadData() {
             const saved = localStorage.getItem('perpTrackerFinalTradeDown');
             if (saved) {
-                projectData = JSON.parse(saved);
-            } else {
-                resetDefaults();
+            projectData = JSON.parse(saved);
+            // Migrar nuevos proyectos si no existen en los datos guardados
+            projects.forEach(p => {
+            if (!projectData[p.name]) {
+                projectData[p.name] = {
+                    pool: p.pool,
+                    fdv: p.fdv,
+                    percent: p.percent,
+                    points: 0,
+                    pnl: 0
+                };
             }
-            renderTable();
-        }
+        });
+    } else {
+        resetDefaults();
+    }
+    renderTable();
+}
 
         function resetDefaults() {
             projectData = {};
