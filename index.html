@@ -891,7 +891,7 @@
         }
 
         const projects = [
-            { name: "Extended", logo: "logos/extended.png", trade: "https://app.extended.exchange/join/BABETO", pool: 50000000, fdv: 0.5, percent: 30 },
+            { name: "Extended", logo: "logos/extended.png", trade: "https://app.extended.exchange/join/BABETO", pool: 70000000, fdv: 0.5, percent: 30 },
             { name: "Bullpen", logo: "logos/bullpen.png", trade: "https://bullpen.fi/@bronze-gnu", pool: 69900000, fdv: 0.150, percent: 25 },
             { name: "Pacifica", logo: "logos/pacifica.png", trade: "https://app.pacifica.fi?referral=caravaggio", pool: 300000000, fdv: 0.5, percent: 15 },
             { name: "Based", logo: "logos/based.png", trade: "https://app.based.one/r/DONBEBE", pool: 334000000, fdv: 0.3, percent: 20 },
@@ -947,6 +947,10 @@
                         projectData[p.name].percent = p.percent;
                     }
                 });
+                if (projectData.Extended && projectData.Extended.pool === 50000000) {
+                    projectData.Extended.pool = 70000000;
+                }
+                saveData();
             } else {
                 resetDefaults();
             }
@@ -1118,14 +1122,39 @@
             location.reload();
         });
 
-        document.getElementById('exportBtn').addEventListener('click', () => {
-            const blob = new Blob([JSON.stringify(projectData, null, 2)], { type: 'application/json' });
+        async function exportTrackerData() {
+            const json = JSON.stringify(projectData, null, 2);
+            const filename = 'perp-airdrop-tracker.json';
+
+            if (window.showSaveFilePicker) {
+                try {
+                    const handle = await window.showSaveFilePicker({
+                        suggestedName: filename,
+                        types: [{
+                            description: 'JSON',
+                            accept: { 'application/json': ['.json'] }
+                        }]
+                    });
+                    const writable = await handle.createWritable();
+                    await writable.write(json);
+                    await writable.close();
+                    return;
+                } catch (err) {
+                    if (err && err.name === 'AbortError') return;
+                }
+            }
+
+            const blob = new Blob([json], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'perp-airdrop-tracker.json';
+            a.download = filename;
             a.click();
             URL.revokeObjectURL(url);
+        }
+
+        document.getElementById('exportBtn').addEventListener('click', () => {
+            exportTrackerData();
         });
 
         document.getElementById('importBtn').addEventListener('click', () => {
