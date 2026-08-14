@@ -4,6 +4,15 @@
     <link rel="icon" type="image/png" href="favicon.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Track points, PNL and estimated net airdrop rewards across perpetual DEXs. Data stays in your browser.">
+    <meta name="theme-color" content="#007bff">
+    <meta property="og:title" content="Perp DEX Airdrop Tracker">
+    <meta property="og:description" content="Track points, PNL and estimated net airdrop rewards across perpetual DEXs.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://dondaniel83.github.io/Perp-Airdrop-Calculator/">
+    <meta property="og:image" content="https://dondaniel83.github.io/Perp-Airdrop-Calculator/favicon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@DonJoaquinCrypt">
     <title>Perp DEX Airdrop Tracker</title>
     <style>
         body { 
@@ -12,6 +21,44 @@
             padding: 20px; 
             background: #f4f4f4; 
             color: #333; 
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: flex-end;
+            max-width: 1800px;
+            margin: 0 auto 8px;
+        }
+        .lang-switcher {
+            display: flex;
+            gap: 8px;
+        }
+        .lang-btn {
+            width: 46px;
+            height: 32px;
+            padding: 3px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background: #fff;
+            cursor: pointer;
+            line-height: 0;
+            overflow: hidden;
+            transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+        }
+        .lang-btn svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .lang-btn:hover {
+            transform: scale(1.08);
+            border-color: #007bff;
+        }
+        .lang-btn.active {
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.22);
         }
         h1 { 
             text-align: center; 
@@ -116,6 +163,26 @@
             text-align: center;
         }
 
+        tr.row-filled td {
+            background: #f1faf4;
+        }
+        tr.row-filled td:first-child {
+            box-shadow: inset 5px 0 0 #28a745;
+        }
+        .filled-check {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            margin-right: 6px;
+            border-radius: 50%;
+            background: #28a745;
+            color: #fff;
+            font-size: 0.7em;
+            font-weight: 800;
+            vertical-align: middle;
+        }
         /* Nuevos estilos para inputs "de configuración" (gris claro) */
         .config-input {
             background-color: #e9ecef !important;   /* ← este es el que cambiamos */
@@ -147,6 +214,8 @@
             align-items: flex-start;
         }
         .project-name {
+            display: flex;
+            align-items: center;
             font-weight: 600;
             font-size: 1.1em;
             color: #007bff;
@@ -159,6 +228,41 @@
             text-decoration: none;
             border-radius: 6px;
             font-size: 0.85em;
+        }
+        .trade-btn:hover {
+            background: #0056b3;
+        }
+        .tbd-badge {
+            margin-top: 4px;
+            font-size: 0.7em;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            color: #856404;
+            background: #fff3cd;
+            border-radius: 4px;
+            padding: 2px 6px;
+        }
+
+        .header-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+        .secondary-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 0.95em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .secondary-btn:hover {
+            background: #5a6268;
+            transform: scale(1.05);
         }
 
         .input-group {
@@ -203,9 +307,49 @@
 
         footer { 
             text-align: center; 
-            margin-top: 60px; 
+            margin-top: 24px; 
             font-size: 0.9em; 
             color: #777; 
+        }
+
+        .footer-extra {
+            text-align: center;
+            margin-top: 40px;
+            padding: 0 20px;
+        }
+        .footer-extra .disclaimer {
+            max-width: 820px;
+            margin: 0 auto 16px;
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+        .visits-counter {
+            color: #888;
+            font-size: 0.85em;
+            margin-bottom: 14px;
+        }
+        .x-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #000;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 1.1em;
+        }
+        .x-icon:hover {
+            background: #333;
+        }
+
+        @media screen and (min-width: 1025px) {
+            .input-group label {
+                display: none;
+            }
         }
 
         .share-btn {
@@ -277,6 +421,17 @@
                 border-bottom: 1px solid #ddd;
                 border-radius: 12px 12px 0 0;
             }
+
+            tr.row-filled {
+                border-color: #28a745;
+                box-shadow: 0 4px 12px rgba(40, 167, 69, 0.18);
+            }
+            tr.row-filled .project-cell {
+                background: #e7f6ec;
+            }
+            tr.row-filled td {
+                background: #f1faf4;
+            }
             
             .total-net-box {
                 font-size: 1.7em;
@@ -287,6 +442,10 @@
             
             .header-container {
                 flex-direction: column;
+            }
+
+            .header-actions {
+                justify-content: center;
             }
             
             h1 {
@@ -305,40 +464,63 @@
     </style>
 </head>
 <body>
-    <h1>Perp DEX Airdrop Tracker</h1>
-    <p class="subtitle">The ultimate tool to track points, PNL and estimate net airdrop rewards</p>
+    <div class="top-bar">
+        <div class="lang-switcher" role="group" aria-label="Language">
+            <button type="button" class="lang-btn" data-lang="es" title="Español" aria-label="Español">
+                <svg viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <rect width="60" height="40" fill="#c60b1e"/>
+                    <rect y="10" width="60" height="20" fill="#ffc400"/>
+                </svg>
+            </button>
+            <button type="button" class="lang-btn" data-lang="en" title="English" aria-label="English">
+                <svg viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <rect width="60" height="40" fill="#fff"/>
+                    <rect x="24" width="12" height="40" fill="#ce1126"/>
+                    <rect y="14" width="60" height="12" fill="#ce1126"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <h1 data-i18n="title">Perp DEX Airdrop Tracker</h1>
+    <p class="subtitle" data-i18n="subtitle">The ultimate tool to track points, PNL and estimate net airdrop rewards</p>
     
     <div class="main-section">
         <div class="header-container">
             <div></div>
             <div class="total-net-container">
                 <div class="total-net-box" id="totalNet">$0</div>
-                <button class="share-btn" id="shareBtn">📤 Share on X</button>
+                <button class="share-btn" id="shareBtn" type="button" data-i18n="share">📤 Share on X</button>
             </div>
-            <button class="reset-btn" id="resetBtn">🔄 Reset All</button>
+            <div class="header-actions">
+                <button class="secondary-btn" id="exportBtn" type="button" data-i18n="export">⬇ Export</button>
+                <button class="secondary-btn" id="importBtn" type="button" data-i18n="import">⬆ Import</button>
+                <input type="file" id="importFile" accept="application/json" hidden>
+                <button class="reset-btn" id="resetBtn" type="button" data-i18n="reset">🔄 Reset All</button>
+            </div>
         </div>
 
-        <p class="intro-text">
+        <p class="intro-text" data-i18n="intro">
             Adjust values for each project. Net airdrop includes your full PNL (positive or negative). All data saved locally in your browser.
         </p>
         
-        <p class="disclaimer-text">
+        <p class="disclaimer-text" data-i18n="disclaimer">
             Project values are estimates and may be outdated or change over time. Use as a rough guide only.
         </p>
 
         <table>
             <thead>
                 <tr>
-                    <th>Project</th>
-                    <th>Points Pool (M)</th>
-                    <th>% Airdrop</th>
-                    <th>FDV (B)</th>
-                    <th>Points</th>
-                    <th>PNL ($)</th>
-                    <th>Cost per Point</th>
-                    <th>Value per Point</th>
-                    <th>Net per Point</th>
-                    <th>Net Airdrop</th>
+                    <th data-i18n="thProject">Project</th>
+                    <th data-i18n="thPool">Points Pool (M)</th>
+                    <th data-i18n="thPercent">% Airdrop</th>
+                    <th data-i18n="thFdv">FDV (B)</th>
+                    <th data-i18n="thPoints">Points</th>
+                    <th data-i18n="thPnl">PNL ($)</th>
+                    <th data-i18n="thCost">Cost per Point</th>
+                    <th data-i18n="thValue">Value per Point</th>
+                    <th data-i18n="thNetPoint">Net per Point</th>
+                    <th data-i18n="thNet">Net Airdrop</th>
                 </tr>
             </thead>
             <tbody id="projectsTable"></tbody>
@@ -346,25 +528,126 @@
     </div>
 
     <div class="tips">
-        <h2>Pro Tips</h2>
+        <h2 data-i18n="tipsTitle">Pro Tips</h2>
         <ul style="text-align: left; max-width: 800px; margin: 0 auto;">
-            <li>Use limit orders to earn maker rewards</li>
-            <li>Diversify your volume across multiple platforms</li>
-            <li>Track your PNL honestly to see real net profit</li>
-            <li>If you like this tool and want to support the content, feel free to use any of the "Trade" links above — they all include my referral (helps me a lot at no extra cost to you 😎)</li>
+            <li data-i18n="tip1">Use limit orders to earn maker rewards</li>
+            <li data-i18n="tip2">Diversify your volume across multiple platforms</li>
+            <li data-i18n="tip3">Track your PNL honestly to see real net profit</li>
+            <li data-i18n="tip4">Most "Trade" links include my referral — same cost to you, helps keep the tool alive 😎</li>
         </ul>
-        <p style="margin-top: 30px;"><strong>Warning:</strong> Leverage trading is high risk. Only use capital you can afford to lose.</p>
+        <p style="margin-top: 30px;" data-i18n-html="warning"><strong>Warning:</strong> Leverage trading is high risk. Only use capital you can afford to lose.</p>
     </div>
 
     <div class="footer-extra">
-        <p class="disclaimer">Disclaimer. The information provided on this website is for informational purposes only. Always do your own research before using any cryptocurrency exchange.</p>
+        <p class="disclaimer" data-i18n="footerDisclaimer">Disclaimer. The information provided on this website is for informational purposes only. Always do your own research before using any cryptocurrency exchange.</p>
         <div class="visits-counter" id="visitCounter">Visits: Loading...</div>
-        <a href="https://x.com/DonJoaquinCrypt" target="_blank" class="x-icon">X</a>
+        <a href="https://x.com/DonJoaquinCrypt" target="_blank" rel="noopener noreferrer" class="x-icon">X</a>
     </div>
 
-    <footer>App tool made by Danb3l, Made with the help of Grok! • All your data is saved in your browser</footer>
+    <footer data-i18n="footer">App tool made by Danb3l, Made with the help of Grok! • All your data is saved in your browser</footer>
 
     <script>
+        const STORAGE_KEY = 'perpTrackerFinalTradeDown';
+        const LANG_KEY = 'perpTrackerLang';
+        const I18N = {
+            en: {
+                title: 'Perp DEX Airdrop Tracker',
+                subtitle: 'The ultimate tool to track points, PNL and estimate net airdrop rewards',
+                totalNet: 'Total Expected Net Profit: {n}',
+                share: '📤 Share on X',
+                export: '⬇ Export',
+                import: '⬆ Import',
+                reset: '🔄 Reset All',
+                resetConfirm: 'Reset all points, PNL and estimates to the default values?',
+                intro: 'Adjust values for each project. Net airdrop includes your full PNL (positive or negative). All data saved locally in your browser.',
+                disclaimer: 'Project values are estimates and may be outdated or change over time. Use as a rough guide only.',
+                thProject: 'Project',
+                thPool: 'Points Pool (M)',
+                thPercent: '% Airdrop',
+                thFdv: 'FDV (B)',
+                thPoints: 'Points',
+                thPnl: 'PNL ($)',
+                thCost: 'Cost per Point',
+                thValue: 'Value per Point',
+                thNetPoint: 'Net per Point',
+                thNet: 'Net Airdrop',
+                trade: 'Trade',
+                tbd: 'NUMBERS TBD',
+                filled: 'Filled',
+                tipsTitle: 'Pro Tips',
+                tip1: 'Use limit orders to earn maker rewards',
+                tip2: 'Diversify your volume across multiple platforms',
+                tip3: 'Track your PNL honestly to see real net profit',
+                tip4: 'Most "Trade" links include my referral — same cost to you, helps keep the tool alive 😎',
+                warning: '<strong>Warning:</strong> Leverage trading is high risk. Only use capital you can afford to lose.',
+                footerDisclaimer: 'Disclaimer. The information provided on this website is for informational purposes only. Always do your own research before using any cryptocurrency exchange.',
+                visits: 'Your visits on this device: {n}',
+                footer: 'App tool made by Danb3l, Made with the help of Grok! • All your data is saved in your browser',
+                importError: 'Could not import that file. Use a JSON export from this tracker.',
+                shareTweet: 'My expected net on Perp DEX Airdrop Tracker: {profit} 🚀 Check yours: {url} #Airdrop #PerpDEX'
+            },
+            es: {
+                title: 'Perp DEX Airdrop Tracker',
+                subtitle: 'La herramienta para seguir puntos, PnL y estimar el airdrop neto',
+                totalNet: 'Beneficio neto esperado: {n}',
+                share: '📤 Compartir en X',
+                export: '⬇ Exportar',
+                import: '⬆ Importar',
+                reset: '🔄 Resetear todo',
+                resetConfirm: '¿Resetear puntos, PnL y estimaciones a los valores por defecto?',
+                intro: 'Ajusta los valores de cada proyecto. El airdrop neto incluye tu PnL completo (positivo o negativo). Todo se guarda en tu navegador.',
+                disclaimer: 'Los valores son estimaciones y pueden quedar desactualizados. Úsalo como guía aproximada.',
+                thProject: 'Proyecto',
+                thPool: 'Pool de puntos (M)',
+                thPercent: '% Airdrop',
+                thFdv: 'FDV (B)',
+                thPoints: 'Puntos',
+                thPnl: 'PnL ($)',
+                thCost: 'Coste por punto',
+                thValue: 'Valor por punto',
+                thNetPoint: 'Neto por punto',
+                thNet: 'Airdrop neto',
+                trade: 'Trade',
+                tbd: 'SIN NÚMEROS',
+                filled: 'Rellenado',
+                tipsTitle: 'Consejos',
+                tip1: 'Usa órdenes limit para ganar rewards de maker',
+                tip2: 'Diversifica el volumen entre varias plataformas',
+                tip3: 'Anota el PnL con honestidad para ver el neto real',
+                tip4: 'La mayoría de los enlaces Trade llevan mi referral: a ti te cuesta lo mismo y ayuda a mantener la tool 😎',
+                warning: '<strong>Aviso:</strong> el trading con apalancamiento es de alto riesgo. Usa solo capital que puedas permitirte perder.',
+                footerDisclaimer: 'Aviso. La información de esta web es solo orientativa. Haz tu propia investigación antes de usar cualquier exchange.',
+                visits: 'Tus visitas en este dispositivo: {n}',
+                footer: 'Tool hecha por Danb3l, con ayuda de Grok! • Tus datos se guardan en el navegador',
+                importError: 'No se pudo importar ese archivo. Usa un JSON exportado desde este tracker.',
+                shareTweet: 'Mi neto esperado en Perp DEX Airdrop Tracker: {profit} 🚀 Mira el tuyo: {url} #Airdrop #PerpDEX'
+            }
+        };
+
+        const savedLang = localStorage.getItem(LANG_KEY);
+        let lang = savedLang || ((navigator.language || '').toLowerCase().startsWith('es') ? 'es' : 'en');
+        if (!I18N[lang]) lang = 'en';
+
+        function t(key) {
+            return (I18N[lang] && I18N[lang][key]) || I18N.en[key] || key;
+        }
+
+        function applyI18n() {
+            document.documentElement.lang = lang;
+            document.title = t('title');
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                el.textContent = t(el.dataset.i18n);
+            });
+            document.querySelectorAll('[data-i18n-html]').forEach(el => {
+                el.innerHTML = t(el.dataset.i18nHtml);
+            });
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.lang === lang);
+            });
+            document.getElementById('visitCounter').textContent = t('visits').replace('{n}', String(visitCount.toLocaleString()));
+            renderTable();
+        }
+
         const projects = [
             { name: "Extended", logo: "logos/extended.png", trade: "https://app.extended.exchange/join/BABETO", pool: 50000000, fdv: 0.5, percent: 30 },
             { name: "Bullpen", logo: "logos/bullpen.png", trade: "https://bullpen.fi/@bronze-gnu", pool: 69900000, fdv: 0.150, percent: 25 },
@@ -383,67 +666,68 @@
             { name: "Hibachi", logo: "logos/hibachi.png", trade: "https://hibachi.xyz/r/sephirot", pool: 53000000, fdv: 0.3, percent: 25 },
             { name: "TxFlow", logo: "logos/txflow.png", trade: "https://app.txflow.com/", pool: 0, fdv: 0, percent: 0 },
             { name: "RISEx", logo: "logos/risex.png", trade: "https://www.rise.trade/", pool: 10000000, fdv: 0.3, percent: 20 },
-        
         ];
 
         let projectData = {};
+        let lastTotalNet = 0;
+        const visitCount = (parseInt(localStorage.getItem('trackerVisits'), 10) || 0) + 1;
+        localStorage.setItem('trackerVisits', visitCount);
+
+        function defaultEntry(p) {
+            return {
+                pool: p.pool,
+                fdv: p.fdv,
+                percent: p.percent,
+                points: 0,
+                pnl: 0
+            };
+        }
 
         function loadData() {
-            const saved = localStorage.getItem('perpTrackerFinalTradeDown');
+            const saved = localStorage.getItem(STORAGE_KEY);
             if (saved) {
-            projectData = JSON.parse(saved);
-            // Migrar nuevos proyectos si no existen en los datos guardados
-            projects.forEach(p => {
-            if (!projectData[p.name]) {
-                projectData[p.name] = {
-                    pool: p.pool,
-                    fdv: p.fdv,
-                    percent: p.percent,
-                    points: 0,
-                    pnl: 0
-                };
+                try {
+                    projectData = JSON.parse(saved);
+                } catch (e) {
+                    projectData = {};
+                }
+                projects.forEach(p => {
+                    if (!projectData[p.name]) {
+                        projectData[p.name] = defaultEntry(p);
+                    }
+                });
+            } else {
+                resetDefaults();
             }
-        });
-    } else {
-        resetDefaults();
-    }
-    renderTable();
-}
+        }
 
         function resetDefaults() {
             projectData = {};
             projects.forEach(p => {
-                projectData[p.name] = {
-                    pool: p.pool,
-                    fdv: p.fdv,
-                    percent: p.percent,
-                    points: 0,
-                    pnl: 0
-                };
+                projectData[p.name] = defaultEntry(p);
             });
         }
 
         function saveData() {
-            localStorage.setItem('perpTrackerFinalTradeDown', JSON.stringify(projectData));
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(projectData));
         }
 
-        function resetAll() {
-            localStorage.removeItem('perpTrackerFinalTradeDown');
-            location.reload();
+        function hasEstimate(d) {
+            return d.pool > 0 && d.fdv > 0 && d.percent > 0;
         }
 
         function calculateProject(name) {
             const d = projectData[name];
-            const pool = d.pool || 1;
-            const mc = d.fdv * 1e9;
-            const gross = d.points > 0 ? (d.points / pool) * mc * (d.percent / 100) : 0;
-            const net = gross + d.pnl;
-
+            const estimated = hasEstimate(d);
+            const gross = estimated && d.points > 0
+                ? (d.points / d.pool) * (d.fdv * 1e9) * (d.percent / 100)
+                : 0;
+            const net = gross + (d.pnl || 0);
             const cost = d.points > 0 ? d.pnl / d.points : 0;
-            const vpp = d.points > 0 ? gross / d.points : 0;
-            const netPerPoint = vpp + cost;
+            const vpp = estimated && d.points > 0 ? gross / d.points : 0;
+            const netPerPoint = estimated ? vpp + cost : cost;
 
-            return { net, cost, vpp, netPerPoint };
+            return { net, cost, vpp, netPerPoint, estimated };
         }
 
         function isFilled(name) {
@@ -451,96 +735,109 @@
             return d.points > 0 || d.pnl !== 0;
         }
 
+        function formatMoney(n, digits) {
+            const abs = Math.abs(n).toLocaleString(undefined, {
+                minimumFractionDigits: digits,
+                maximumFractionDigits: digits
+            });
+            return (n < 0 ? '-$' : '$') + abs;
+        }
+
+        function formatSigned(n, digits) {
+            const abs = Math.abs(n).toFixed(digits);
+            if (n > 0) return '+$' + abs;
+            if (n < 0) return '-$' + abs;
+            return '$' + abs;
+        }
+
         function renderTable() {
             const tbody = document.getElementById('projectsTable');
             tbody.innerHTML = '';
 
-            // Separate filled and unfilled
             const filledProjects = projects.filter(p => isFilled(p.name));
             const unfilledProjects = projects.filter(p => !isFilled(p.name));
 
-            // Calculate and sort filled by net descending
             const filledRanked = filledProjects.map(p => ({
                 name: p.name,
                 calc: calculateProject(p.name)
             })).sort((a, b) => b.calc.net - a.calc.net);
 
-            // Unfilled in original order
             const unfilledRanked = unfilledProjects.map(p => ({
                 name: p.name,
                 calc: calculateProject(p.name)
             }));
 
-            // Combine: filled sorted + unfilled
             const ranked = filledRanked.concat(unfilledRanked);
 
-            let totalNet = ranked.reduce((sum, p) => sum + p.calc.net, 0);
-            document.getElementById('totalNet').textContent = `Total Expected Net Profit: $${totalNet.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})}`;
+            lastTotalNet = ranked.reduce((sum, p) => sum + p.calc.net, 0);
+            document.getElementById('totalNet').textContent =
+                t('totalNet').replace('{n}', formatMoney(lastTotalNet, 0));
 
             ranked.forEach((item, index) => {
                 const p = projects.find(pr => pr.name === item.name);
                 const d = projectData[item.name];
                 const calc = item.calc;
-
+                const filled = index < filledRanked.length;
+                const medal = filled
+                    ? (index === 0 ? '👑' : index === 1 ? '🥈' : index === 2 ? '🥉' : `#${index + 1}`)
+                    : '';
                 const poolInMillions = d.pool / 1000000;
-
                 const row = document.createElement('tr');
-
-                const medal = index === 0 ? '👑' : index === 1 ? '🥈' : index === 2 ? '🥉' : `#${index + 1}`;
+                if (filled) row.className = 'row-filled';
 
                 row.innerHTML = `
-                    <td class="project-cell" data-label="Project">
+                    <td class="project-cell" data-label="${t('thProject')}">
                         <img src="${p.logo}" alt="${p.name}">
                         <div class="project-info">
-                            <div class="project-name">${p.name}</div>
-                            <a href="${p.trade}" target="_blank" class="trade-btn">Trade</a>
+                            <div class="project-name">${filled ? `<span class="filled-check" title="${t('filled')}">✓</span>` : ''}${p.name}</div>
+                            ${calc.estimated ? '' : `<div class="tbd-badge">${t('tbd')}</div>`}
+                            <a href="${p.trade}" target="_blank" rel="noopener noreferrer" class="trade-btn">${t('trade')}</a>
                         </div>
                     </td>
-                    <td data-label="Points Pool (M)">
+                    <td data-label="${t('thPool')}">
                         <div class="input-group">
-                            <label>Points Pool (M)</label>
+                            <label>${t('thPool')}</label>
                             <input type="number" class="pool-input config-input" value="${poolInMillions}" min="0" step="any">
                         </div>
                     </td>
-                    <td data-label="% Airdrop">
+                    <td data-label="${t('thPercent')}">
                         <div class="input-group">
-                            <label>% Airdrop</label>
-                            <input type="number" class="percent-input config-input" value="${d.percent}" min="0" max="50" step="1">
+                            <label>${t('thPercent')}</label>
+                            <input type="number" class="percent-input config-input" value="${d.percent}" min="0" max="100" step="1">
                         </div>
                     </td>
-                    <td data-label="FDV (B)">
+                    <td data-label="${t('thFdv')}">
                         <div class="input-group">
-                            <label>FDV (B)</label>
-                            <input type="number" class="fdv-input config-input" value="${d.fdv}" min="0" max="5" step="0.1">
+                            <label>${t('thFdv')}</label>
+                            <input type="number" class="fdv-input config-input" value="${d.fdv}" min="0" max="50" step="0.1">
                         </div>
                     </td>
-                    <td data-label="Points">
+                    <td data-label="${t('thPoints')}">
                         <div class="input-group">
-                            <label>Points</label>
-                            <input type="number" class="points-input" value="${d.points}" min="0">
+                            <label>${t('thPoints')}</label>
+                            <input type="number" class="points-input" value="${d.points}" min="0" step="any">
                         </div>
                     </td>
-                    <td data-label="PNL ($)">
+                    <td data-label="${t('thPnl')}">
                         <div class="input-group">
-                            <label>PNL ($)</label>
+                            <label>${t('thPnl')}</label>
                             <input type="number" class="pnl-input" value="${d.pnl}" step="any">
                         </div>
                     </td>
-                    <td data-label="Cost per Point" class="${calc.cost > 0 ? 'positive' : calc.cost < 0 ? 'negative' : ''}">
-                        ${calc.cost > 0 ? '+' : ''}$${Math.abs(calc.cost).toFixed(4)}
+                    <td data-label="${t('thCost')}" class="${calc.cost > 0 ? 'positive' : calc.cost < 0 ? 'negative' : ''}">
+                        ${formatSigned(calc.cost, 4)}
                     </td>
-                    <td data-label="Value per Point">$${calc.vpp.toFixed(4)}</td>
-                    <td data-label="Net per Point" class="${calc.netPerPoint > 0 ? 'positive' : calc.netPerPoint < 0 ? 'negative' : ''}">
-                        ${calc.netPerPoint > 0 ? '+' : ''}$${Math.abs(calc.netPerPoint).toFixed(4)}
+                    <td data-label="${t('thValue')}">${calc.estimated ? formatMoney(calc.vpp, 4) : '—'}</td>
+                    <td data-label="${t('thNetPoint')}" class="${calc.netPerPoint > 0 ? 'positive' : calc.netPerPoint < 0 ? 'negative' : ''}">
+                        ${calc.estimated || d.points > 0 ? formatSigned(calc.netPerPoint, 4) : '—'}
                     </td>
-                    <td data-label="Net Airdrop" style="font-weight: bold; color: ${calc.net > 0 ? '#28a745' : calc.net < 0 ? '#dc3545' : '#333'}">
-                        $${calc.net.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})}
-                        <span class="medal">${medal}</span>
+                    <td data-label="${t('thNet')}" style="font-weight: bold; color: ${calc.net > 0 ? '#28a745' : calc.net < 0 ? '#dc3545' : '#333'}">
+                        ${formatMoney(calc.net, 0)}
+                        ${medal ? `<span class="medal">${medal}</span>` : ''}
                     </td>
                 `;
                 tbody.appendChild(row);
 
-                // Evento especial para pool
                 row.querySelector('.pool-input').addEventListener('change', e => {
                     let val = parseFloat(e.target.value);
                     if (isNaN(val)) val = 0;
@@ -549,14 +846,13 @@
                     renderTable();
                 });
 
-                // Resto de inputs
                 ['percent-input', 'fdv-input', 'points-input', 'pnl-input'].forEach(cls => {
                     const input = row.querySelector('.' + cls);
                     input.addEventListener('change', e => {
                         let val = parseFloat(e.target.value);
                         if (isNaN(val)) val = 0;
-                        if (cls === 'percent-input') val = Math.max(0, Math.min(50, val));
-                        if (cls === 'fdv-input') val = Math.max(0, Math.min(5, val));
+                        if (cls === 'percent-input') val = Math.max(0, Math.min(100, val));
+                        if (cls === 'fdv-input') val = Math.max(0, Math.min(50, val));
                         projectData[p.name][cls.replace('-input', '')] = val;
                         saveData();
                         renderTable();
@@ -566,24 +862,73 @@
         }
 
         document.getElementById('resetBtn').addEventListener('click', () => {
-            localStorage.removeItem('perpTrackerFinalTradeDown');
+            if (!confirm(t('resetConfirm'))) return;
+            localStorage.removeItem(STORAGE_KEY);
             location.reload();
         });
 
-        let visits = localStorage.getItem('trackerVisits') || 0;
-        visits = parseInt(visits) + 1;
-        localStorage.setItem('trackerVisits', visits);
-        document.getElementById('visitCounter').textContent = `Visits: ${visits.toLocaleString()}`;
-        
+        document.getElementById('exportBtn').addEventListener('click', () => {
+            const blob = new Blob([JSON.stringify(projectData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'perp-airdrop-tracker.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+
+        document.getElementById('importBtn').addEventListener('click', () => {
+            document.getElementById('importFile').click();
+        });
+
+        document.getElementById('importFile').addEventListener('change', e => {
+            const file = e.target.files && e.target.files[0];
+            e.target.value = '';
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = () => {
+                try {
+                    const imported = JSON.parse(reader.result);
+                    if (!imported || typeof imported !== 'object') throw new Error('Invalid file');
+                    projects.forEach(p => {
+                        const row = imported[p.name];
+                        if (!row) return;
+                        const current = projectData[p.name] || defaultEntry(p);
+                        projectData[p.name] = {
+                            pool: Number.isFinite(row.pool) ? row.pool : current.pool,
+                            fdv: Number.isFinite(row.fdv) ? row.fdv : current.fdv,
+                            percent: Number.isFinite(row.percent) ? row.percent : current.percent,
+                            points: Number.isFinite(row.points) ? row.points : current.points,
+                            pnl: Number.isFinite(row.pnl) ? row.pnl : current.pnl
+                        };
+                    });
+                    saveData();
+                    renderTable();
+                } catch (err) {
+                    alert(t('importError'));
+                }
+            };
+            reader.readAsText(file);
+        });
+
         document.getElementById('shareBtn').addEventListener('click', () => {
-            const profit = document.getElementById('totalNet').textContent;
-            const url = window.location.href;
-            const text = `My Total Expected Net Profit on Perp DEX Airdrop Tracker is ${profit}! 🚀💰 Check yours: ${url} #Airdrop #PerpDEX #Crypto`;
-            const tweetUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(text)}`;
-            window.open(tweetUrl, '_blank');
+            const url = 'https://dondaniel83.github.io/Perp-Airdrop-Calculator/';
+            const text = t('shareTweet')
+                .replace('{profit}', formatMoney(lastTotalNet, 0))
+                .replace('{url}', url);
+            window.open(`https://x.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
+        });
+
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                lang = btn.dataset.lang;
+                localStorage.setItem(LANG_KEY, lang);
+                applyI18n();
+            });
         });
 
         loadData();
+        applyI18n();
     </script>
 </body>
 </html>
