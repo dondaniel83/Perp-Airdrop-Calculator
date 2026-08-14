@@ -8,13 +8,15 @@
     <meta name="theme-color" content="#010805" id="themeColor">
     <script>
         (function () {
+            var allowed = { classic: 1, matrix: 1, dragon: 1 };
             var theme = localStorage.getItem('perpTrackerTheme') || 'matrix';
+            if (!allowed[theme]) theme = 'matrix';
             document.documentElement.setAttribute('data-theme', theme);
         })();
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <meta property="og:title" content="Perp DEX Airdrop Tracker">
     <meta property="og:description" content="Track points, PNL and estimated net airdrop rewards across perpetual DEXs.">
     <meta property="og:type" content="website">
@@ -42,20 +44,30 @@
             position: relative;
             z-index: 2;
         }
+        .theme-switcher {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: flex-end;
+        }
         .theme-btn {
             border: 2px solid #333;
             background: #111;
             color: #fff;
             border-radius: 8px;
-            padding: 6px 12px;
+            padding: 6px 10px;
             font-weight: 700;
             cursor: pointer;
-            font-size: 0.85em;
+            font-size: 0.78em;
             letter-spacing: 0.04em;
-            transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+            transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s, background 0.15s;
         }
         .theme-btn:hover {
             transform: scale(1.05);
+        }
+        .theme-btn.active {
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.22);
         }
         .lang-switcher {
             display: flex;
@@ -490,7 +502,8 @@
             }
         }
 
-        #matrixRain {
+        #matrixRain,
+        #dragonFire {
             display: none;
             position: fixed;
             inset: 0;
@@ -498,6 +511,41 @@
             height: 100%;
             z-index: 0;
             pointer-events: none;
+        }
+        .dragon-mark {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .dragon-img {
+            position: absolute;
+            bottom: -4%;
+            height: min(78vh, 820px);
+            width: auto;
+            object-fit: contain;
+            opacity: 0.62;
+            filter: saturate(1.15) contrast(1.08);
+        }
+        .dragon-img-gold {
+            left: -6%;
+            -webkit-mask-image: linear-gradient(90deg, #000 45%, transparent 92%);
+            mask-image: linear-gradient(90deg, #000 45%, transparent 92%);
+        }
+        .dragon-img-red {
+            right: -6%;
+            -webkit-mask-image: linear-gradient(270deg, #000 45%, transparent 92%);
+            mask-image: linear-gradient(270deg, #000 45%, transparent 92%);
+        }
+        @media screen and (max-width: 1024px) {
+            .dragon-img {
+                height: 42vh;
+                opacity: 0.4;
+            }
+            .dragon-img-gold { left: -18%; }
+            .dragon-img-red { display: none; }
         }
 
         [data-theme="matrix"] {
@@ -539,8 +587,13 @@
             backdrop-filter: blur(2px);
         }
         [data-theme="matrix"] .theme-btn {
-            border-color: #00ff41;
+            border-color: #145c28;
             background: #00180a;
+            color: #7dca8c;
+            box-shadow: none;
+        }
+        [data-theme="matrix"] .theme-btn.active {
+            border-color: #00ff41;
             color: #00ff41;
             box-shadow: 0 0 12px rgba(0, 255, 65, 0.2);
         }
@@ -693,15 +746,228 @@
                 background: rgba(0, 255, 65, 0.08);
             }
         }
+        [data-theme="dragon"] {
+            color-scheme: dark;
+        }
+        [data-theme="dragon"] #dragonFire,
+        [data-theme="dragon"] .dragon-mark {
+            display: block;
+        }
+        [data-theme="dragon"] body {
+            font-family: 'Cinzel', 'Times New Roman', serif;
+            background:
+                radial-gradient(ellipse 90% 45% at 50% 115%, rgba(190, 45, 10, 0.5), transparent 55%),
+                radial-gradient(ellipse at top, #2a0c0c, #070101);
+            color: #f3e2c7;
+        }
+        [data-theme="dragon"] h1,
+        [data-theme="dragon"] .subtitle,
+        [data-theme="dragon"] .main-section,
+        [data-theme="dragon"] .tips,
+        [data-theme="dragon"] .footer-extra,
+        [data-theme="dragon"] footer {
+            position: relative;
+            z-index: 1;
+        }
+        [data-theme="dragon"] h1 {
+            color: #e8c56b;
+            text-shadow: 0 0 18px rgba(200, 40, 0, 0.55), 0 2px 0 #4a0b0b;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+        [data-theme="dragon"] .subtitle {
+            color: #c9a36a;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            font-size: 0.82em;
+        }
+        [data-theme="dragon"] .main-section {
+            background: rgba(18, 6, 6, 0.82);
+            border: 1px solid rgba(212, 175, 55, 0.45);
+            box-shadow: 0 0 50px rgba(160, 30, 0, 0.18), inset 0 0 40px rgba(80, 10, 0, 0.2);
+        }
+        [data-theme="dragon"] .theme-btn {
+            border-color: #6b1d1d;
+            background: #1a0707;
+            color: #c9a36a;
+            box-shadow: none;
+        }
+        [data-theme="dragon"] .theme-btn.active {
+            border-color: #e8c56b;
+            color: #e8c56b;
+            box-shadow: 0 0 12px rgba(200, 40, 0, 0.35);
+        }
+        [data-theme="dragon"] .lang-btn {
+            background: #1a0707;
+            border-color: #6b1d1d;
+        }
+        [data-theme="dragon"] .lang-btn:hover,
+        [data-theme="dragon"] .lang-btn.active {
+            border-color: #e8c56b;
+            box-shadow: 0 0 0 3px rgba(232, 197, 107, 0.22);
+        }
+        [data-theme="dragon"] .total-net-box {
+            background: linear-gradient(135deg, #4a0d0d, #8b1a1a);
+            border: 1px solid #e8c56b;
+            box-shadow: 0 0 28px rgba(200, 40, 0, 0.4);
+            color: #f8e7c0;
+            text-shadow: 0 0 8px rgba(255, 80, 0, 0.35);
+        }
+        [data-theme="dragon"] .share-btn {
+            background: #e8c56b;
+            color: #2a0a0a;
+            box-shadow: 0 0 16px rgba(232, 197, 107, 0.3);
+        }
+        [data-theme="dragon"] .share-btn:hover {
+            background: #f3dc9a;
+        }
+        [data-theme="dragon"] .secondary-btn {
+            background: transparent;
+            border: 1px solid #e8c56b;
+            color: #e8c56b;
+        }
+        [data-theme="dragon"] .secondary-btn:hover {
+            background: rgba(232, 197, 107, 0.12);
+        }
+        [data-theme="dragon"] .reset-btn {
+            background: transparent;
+            border: 1px solid #c41e3a;
+            color: #ff8a8a;
+        }
+        [data-theme="dragon"] .reset-btn:hover {
+            background: rgba(196, 30, 58, 0.18);
+        }
+        [data-theme="dragon"] .intro-text,
+        [data-theme="dragon"] .disclaimer-text {
+            color: #d2b48c;
+        }
+        [data-theme="dragon"] th {
+            background: #4a0d0d;
+            color: #e8c56b;
+            border-bottom: 1px solid #e8c56b;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            font-size: 0.78em;
+        }
+        [data-theme="dragon"] td {
+            border-bottom: 1px solid rgba(232, 197, 107, 0.15);
+            color: #f3e2c7;
+        }
+        [data-theme="dragon"] tr.row-filled td {
+            background: rgba(180, 40, 10, 0.18);
+        }
+        [data-theme="dragon"] tr.row-filled td:first-child {
+            box-shadow: inset 5px 0 0 #e8c56b;
+        }
+        [data-theme="dragon"] .filled-check {
+            background: #e8c56b;
+            color: #2a0a0a;
+            box-shadow: 0 0 8px #e8c56b;
+        }
+        [data-theme="dragon"] .project-name {
+            color: #e8c56b;
+            text-shadow: 0 0 8px rgba(200, 40, 0, 0.35);
+        }
+        [data-theme="dragon"] .trade-btn {
+            background: #8b1a1a;
+            color: #f8e7c0;
+            border: 1px solid #e8c56b;
+        }
+        [data-theme="dragon"] .trade-btn:hover {
+            background: #a82424;
+        }
+        [data-theme="dragon"] .tbd-badge {
+            color: #e8c56b;
+            background: rgba(139, 26, 26, 0.45);
+            border: 1px solid rgba(232, 197, 107, 0.4);
+        }
+        [data-theme="dragon"] .config-input,
+        [data-theme="dragon"] .config-input:focus,
+        [data-theme="dragon"] input[type="number"] {
+            background-color: #1a0707 !important;
+            border: 1px solid #6b1d1d;
+            color: #f3e2c7;
+            caret-color: #e8c56b;
+        }
+        [data-theme="dragon"] .config-input:focus,
+        [data-theme="dragon"] input[type="number"]:focus {
+            border-color: #e8c56b;
+            outline: none;
+            box-shadow: 0 0 8px rgba(232, 197, 107, 0.28);
+        }
+        [data-theme="dragon"] .input-group label {
+            color: #c9a36a;
+        }
+        [data-theme="dragon"] .positive {
+            color: #e8c56b;
+            text-shadow: 0 0 6px rgba(232, 197, 107, 0.4);
+        }
+        [data-theme="dragon"] .negative {
+            color: #ff6b6b;
+        }
+        [data-theme="dragon"] .tips {
+            background: rgba(18, 6, 6, 0.9);
+            border: 1px solid rgba(212, 175, 55, 0.45);
+            color: #f3e2c7;
+        }
+        [data-theme="dragon"] .tips h2 {
+            color: #e8c56b;
+        }
+        [data-theme="dragon"] .footer-extra .disclaimer,
+        [data-theme="dragon"] .visits-counter,
+        [data-theme="dragon"] footer {
+            color: #b08968;
+        }
+        [data-theme="dragon"] .x-icon {
+            background: #e8c56b;
+            color: #2a0a0a;
+        }
+        [data-theme="dragon"] .x-icon:hover {
+            background: #f3dc9a;
+        }
+        @media screen and (max-width: 1024px) {
+            [data-theme="dragon"] tr {
+                background: rgba(18, 6, 6, 0.94);
+                border: 1px solid rgba(232, 197, 107, 0.28);
+                box-shadow: 0 0 18px rgba(160, 30, 0, 0.15);
+            }
+            [data-theme="dragon"] td:before {
+                color: #e8c56b;
+            }
+            [data-theme="dragon"] .project-cell {
+                background: rgba(74, 13, 13, 0.55);
+                border-bottom: 1px solid rgba(232, 197, 107, 0.25);
+            }
+            [data-theme="dragon"] tr.row-filled {
+                border-color: #e8c56b;
+                box-shadow: 0 0 18px rgba(200, 40, 0, 0.22);
+            }
+            [data-theme="dragon"] tr.row-filled .project-cell,
+            [data-theme="dragon"] tr.row-filled td {
+                background: rgba(180, 40, 10, 0.18);
+            }
+        }
+
         @media (prefers-reduced-motion: reduce) {
-            #matrixRain { display: none !important; }
+            #matrixRain,
+            #dragonFire { display: none !important; }
         }
     </style>
 </head>
 <body>
     <canvas id="matrixRain" aria-hidden="true"></canvas>
+    <canvas id="dragonFire" aria-hidden="true"></canvas>
+    <div class="dragon-mark" aria-hidden="true">
+        <img class="dragon-img dragon-img-gold" src="dragons/dragon-gold.jpg" alt="">
+        <img class="dragon-img dragon-img-red" src="dragons/dragon-red.jpg" alt="">
+    </div>
     <div class="top-bar">
-        <button type="button" class="theme-btn" id="themeBtn" aria-pressed="true">Classic</button>
+        <div class="theme-switcher" role="group" aria-label="Theme">
+            <button type="button" class="theme-btn" data-theme-id="classic" data-i18n="themeClassic">Classic</button>
+            <button type="button" class="theme-btn" data-theme-id="matrix" data-i18n="themeMatrix">Matrix</button>
+            <button type="button" class="theme-btn" data-theme-id="dragon" data-i18n="themeDragon" title="La Casa del Dragón">Dragon</button>
+        </div>
         <div class="lang-switcher" role="group" aria-label="Language">
             <button type="button" class="lang-btn" data-lang="es" title="Español" aria-label="Español">
                 <svg viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -823,7 +1089,8 @@
                 importError: 'Could not import that file. Use a JSON export from this tracker.',
                 shareTweet: 'My expected net on Perp DEX Airdrop Tracker: {profit} 🚀 Check yours: {url} #Airdrop #PerpDEX',
                 themeClassic: 'Classic',
-                themeMatrix: 'Matrix'
+                themeMatrix: 'Matrix',
+                themeDragon: 'Dragon'
             },
             es: {
                 title: 'Perp DEX Airdrop Tracker',
@@ -861,7 +1128,8 @@
                 importError: 'No se pudo importar ese archivo. Usa un JSON exportado desde este tracker.',
                 shareTweet: 'Mi neto esperado en Perp DEX Airdrop Tracker: {profit} 🚀 Mira el tuyo: {url} #Airdrop #PerpDEX',
                 themeClassic: 'Clásico',
-                themeMatrix: 'Matrix'
+                themeMatrix: 'Matrix',
+                themeDragon: 'Dragón'
             }
         };
 
@@ -892,7 +1160,7 @@
 
         const projects = [
             { name: "Extended", logo: "logos/extended.png", trade: "https://app.extended.exchange/join/BABETO", pool: 70000000, fdv: 0.5, percent: 30 },
-            { name: "Bullpen", logo: "logos/bullpen.png", trade: "https://bullpen.fi/@bronze-gnu", pool: 69900000, fdv: 0.150, percent: 25 },
+            { name: "Bullpen", logo: "logos/bullpen.png", trade: "https://bullpen.fi/@bronze-gnu", pool: 100000000, fdv: 0.150, percent: 25 },
             { name: "Pacifica", logo: "logos/pacifica.png", trade: "https://app.pacifica.fi?referral=caravaggio", pool: 300000000, fdv: 0.5, percent: 15 },
             { name: "Based", logo: "logos/based.png", trade: "https://app.based.one/r/DONBEBE", pool: 334000000, fdv: 0.3, percent: 20 },
             { name: "Variational", logo: "logos/variational.png", trade: "https://omni.variational.io/?ref=OMNIEMMN1A8X", pool: 8400000, fdv: 0.750, percent: 50 },
@@ -949,6 +1217,9 @@
                 });
                 if (projectData.Extended && projectData.Extended.pool === 50000000) {
                     projectData.Extended.pool = 70000000;
+                }
+                if (projectData.Bullpen && projectData.Bullpen.pool === 69900000) {
+                    projectData.Bullpen.pool = 100000000;
                 }
                 saveData();
             } else {
@@ -1208,28 +1479,34 @@
         });
 
         function currentTheme() {
-            return document.documentElement.getAttribute('data-theme') === 'classic' ? 'classic' : 'matrix';
+            const t = document.documentElement.getAttribute('data-theme');
+            return (t === 'classic' || t === 'dragon' || t === 'matrix') ? t : 'matrix';
         }
 
         function updateThemeButton() {
-            const btn = document.getElementById('themeBtn');
-            const isMatrix = currentTheme() === 'matrix';
-            btn.textContent = isMatrix ? t('themeClassic') : t('themeMatrix');
-            btn.setAttribute('aria-pressed', isMatrix ? 'true' : 'false');
+            const theme = currentTheme();
+            document.querySelectorAll('.theme-btn[data-theme-id]').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.themeId === theme);
+            });
             const color = document.getElementById('themeColor');
-            if (color) color.setAttribute('content', isMatrix ? '#010805' : '#007bff');
+            if (color) {
+                color.setAttribute('content', theme === 'dragon' ? '#1a0505' : theme === 'matrix' ? '#010805' : '#007bff');
+            }
         }
 
         function setTheme(theme) {
+            if (theme !== 'classic' && theme !== 'matrix' && theme !== 'dragon') theme = 'matrix';
             document.documentElement.setAttribute('data-theme', theme);
             localStorage.setItem(THEME_KEY, theme);
             updateThemeButton();
+            stopMatrixRain();
+            stopDragonFire();
             if (theme === 'matrix') startMatrixRain();
-            else stopMatrixRain();
+            if (theme === 'dragon') startDragonFire();
         }
 
-        document.getElementById('themeBtn').addEventListener('click', () => {
-            setTheme(currentTheme() === 'matrix' ? 'classic' : 'matrix');
+        document.querySelectorAll('.theme-btn[data-theme-id]').forEach(btn => {
+            btn.addEventListener('click', () => setTheme(btn.dataset.themeId));
         });
 
         const rainCanvas = document.getElementById('matrixRain');
@@ -1282,21 +1559,95 @@
             rainCtx.clearRect(0, 0, rainCanvas.width, rainCanvas.height);
         }
 
+        const fireCanvas = document.getElementById('dragonFire');
+        const fireCtx = fireCanvas.getContext('2d');
+        let embers = [];
+        let fireRaf = 0;
+        let fireRunning = false;
+
+        function spawnEmber() {
+            return {
+                x: Math.random() * fireCanvas.width,
+                y: fireCanvas.height + Math.random() * 40,
+                r: 1.2 + Math.random() * 2.8,
+                vx: (Math.random() - 0.5) * 0.6,
+                vy: -(0.6 + Math.random() * 1.8),
+                life: 1,
+                decay: 0.004 + Math.random() * 0.008,
+                color: Math.random() > 0.7 ? '#e8c56b' : (Math.random() > 0.45 ? '#ff6b1a' : '#ff3b00')
+            };
+        }
+
+        function resizeFire() {
+            fireCanvas.width = window.innerWidth;
+            fireCanvas.height = window.innerHeight;
+            const count = window.innerWidth < 700 ? 45 : 80;
+            embers = Array.from({ length: count }, spawnEmber);
+        }
+
+        function drawFire() {
+            if (!fireRunning) return;
+            fireCtx.clearRect(0, 0, fireCanvas.width, fireCanvas.height);
+            const glow = fireCtx.createRadialGradient(
+                fireCanvas.width / 2, fireCanvas.height, 0,
+                fireCanvas.width / 2, fireCanvas.height, fireCanvas.height * 0.55
+            );
+            glow.addColorStop(0, 'rgba(180, 40, 0, 0.28)');
+            glow.addColorStop(1, 'rgba(0, 0, 0, 0)');
+            fireCtx.fillStyle = glow;
+            fireCtx.fillRect(0, 0, fireCanvas.width, fireCanvas.height);
+
+            embers.forEach((p, i) => {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.life -= p.decay;
+                if (p.life <= 0 || p.y < -10) embers[i] = spawnEmber();
+                fireCtx.globalAlpha = Math.max(p.life, 0);
+                fireCtx.fillStyle = p.color;
+                fireCtx.beginPath();
+                fireCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                fireCtx.fill();
+            });
+            fireCtx.globalAlpha = 1;
+            fireRaf = requestAnimationFrame(drawFire);
+        }
+
+        function startDragonFire() {
+            const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (reduce || fireRunning) return;
+            fireRunning = true;
+            resizeFire();
+            drawFire();
+        }
+
+        function stopDragonFire() {
+            fireRunning = false;
+            if (fireRaf) cancelAnimationFrame(fireRaf);
+            fireRaf = 0;
+            fireCtx.clearRect(0, 0, fireCanvas.width, fireCanvas.height);
+        }
+
         window.addEventListener('resize', () => {
             if (rainRunning) resizeRain();
+            if (fireRunning) resizeFire();
         });
         document.addEventListener('visibilitychange', () => {
             if (document.hidden) {
                 if (rainRaf) cancelAnimationFrame(rainRaf);
                 rainRaf = 0;
+                if (fireRaf) cancelAnimationFrame(fireRaf);
+                fireRaf = 0;
             } else if (rainRunning) {
                 drawRain();
+            } else if (fireRunning) {
+                drawFire();
             }
         });
 
         loadData();
         applyI18n();
         if (currentTheme() === 'matrix') startMatrixRain();
+        if (currentTheme() === 'dragon') startDragonFire();
     </script>
 </body>
 </html>
