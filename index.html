@@ -533,7 +533,6 @@
             <li data-i18n="tip1">Use limit orders to earn maker rewards</li>
             <li data-i18n="tip2">Diversify your volume across multiple platforms</li>
             <li data-i18n="tip3">Track your PNL honestly to see real net profit</li>
-            <li data-i18n="tip4">Most "Trade" links include my referral — same cost to you, helps keep the tool alive 😎</li>
         </ul>
         <p style="margin-top: 30px;" data-i18n-html="warning"><strong>Warning:</strong> Leverage trading is high risk. Only use capital you can afford to lose.</p>
     </div>
@@ -573,12 +572,12 @@
                 thNet: 'Net Airdrop',
                 trade: 'Trade',
                 tbd: 'NUMBERS TBD',
+                est: 'ESTIMATE',
                 filled: 'Filled',
                 tipsTitle: 'Pro Tips',
                 tip1: 'Use limit orders to earn maker rewards',
                 tip2: 'Diversify your volume across multiple platforms',
                 tip3: 'Track your PNL honestly to see real net profit',
-                tip4: 'Most "Trade" links include my referral — same cost to you, helps keep the tool alive 😎',
                 warning: '<strong>Warning:</strong> Leverage trading is high risk. Only use capital you can afford to lose.',
                 footerDisclaimer: 'Disclaimer. The information provided on this website is for informational purposes only. Always do your own research before using any cryptocurrency exchange.',
                 visits: 'Your visits on this device: {n}',
@@ -609,12 +608,12 @@
                 thNet: 'Airdrop neto',
                 trade: 'Trade',
                 tbd: 'SIN NÚMEROS',
+                est: 'ESTIMACIÓN',
                 filled: 'Rellenado',
                 tipsTitle: 'Consejos',
                 tip1: 'Usa órdenes limit para ganar rewards de maker',
                 tip2: 'Diversifica el volumen entre varias plataformas',
                 tip3: 'Anota el PnL con honestidad para ver el neto real',
-                tip4: 'La mayoría de los enlaces Trade llevan mi referral: a ti te cuesta lo mismo y ayuda a mantener la tool 😎',
                 warning: '<strong>Aviso:</strong> el trading con apalancamiento es de alto riesgo. Usa solo capital que puedas permitirte perder.',
                 footerDisclaimer: 'Aviso. La información de esta web es solo orientativa. Haz tu propia investigación antes de usar cualquier exchange.',
                 visits: 'Tus visitas en este dispositivo: {n}',
@@ -655,7 +654,7 @@
             { name: "Based", logo: "logos/based.png", trade: "https://app.based.one/r/DONBEBE", pool: 334000000, fdv: 0.3, percent: 20 },
             { name: "Variational", logo: "logos/variational.png", trade: "https://omni.variational.io/?ref=OMNIEMMN1A8X", pool: 8400000, fdv: 0.750, percent: 50 },
             { name: "Paradex", logo: "logos/paradex.png", trade: "https://app.paradex.trade/r/insightfulrunner4", pool: 350000000, fdv: 0.5, percent: 20 },
-            { name: "NadoHQ", logo: "logos/nadohq.png", trade: "https://app.nado.xyz/perpetuals", pool: 0, fdv: 0, percent: 0 },
+            { name: "NadoHQ", logo: "logos/nadohq.png", trade: "https://app.nado.xyz/perpetuals", pool: 43000000, fdv: 1, percent: 10, guess: true },
             { name: "EdgeX", logo: "logos/edgex.png", trade: "https://pro.edgex.exchange/referral/VAGGIO", pool: 7311165, fdv: 1, percent: 25 },
             { name: "Ostium", logo: "logos/ostium.png", trade: "https://app.ostium.com/trade?from=SPX&to=USD&ref=X8E0U", pool: 40000000, fdv: 0.5, percent: 15 },
             { name: "Vest", logo: "logos/vest.png", trade: "https://trade.vestmarkets.com/join/VAGGI", pool: 50000000, fdv: 0.3, percent: 30 },
@@ -664,7 +663,7 @@
             { name: "Backpack", logo: "logos/backpack.png", trade: "https://backpack.exchange/", pool: 400000000, fdv: 0.7, percent: 10 },
             { name: "Ethereal", logo: "logos/ethereal.png", trade: "https://app.ethereal.trade/?ref=T8OWFGO3JV3U", pool: 6200000000, fdv: 0.3, percent: 20 },
             { name: "Hibachi", logo: "logos/hibachi.png", trade: "https://hibachi.xyz/r/sephirot", pool: 53000000, fdv: 0.3, percent: 25 },
-            { name: "TxFlow", logo: "logos/txflow.png", trade: "https://app.txflow.com/", pool: 0, fdv: 0, percent: 0 },
+            { name: "TxFlow", logo: "logos/txflow.png", trade: "https://app.txflow.com/", pool: 25000000, fdv: 0.5, percent: 30, guess: true },
             { name: "RISEx", logo: "logos/risex.png", trade: "https://www.rise.trade/", pool: 10000000, fdv: 0.3, percent: 20 },
         ];
 
@@ -694,6 +693,15 @@
                 projects.forEach(p => {
                     if (!projectData[p.name]) {
                         projectData[p.name] = defaultEntry(p);
+                    } else if (
+                        !projectData[p.name].pool &&
+                        !projectData[p.name].fdv &&
+                        !projectData[p.name].percent &&
+                        (p.pool || p.fdv || p.percent)
+                    ) {
+                        projectData[p.name].pool = p.pool;
+                        projectData[p.name].fdv = p.fdv;
+                        projectData[p.name].percent = p.percent;
                     }
                 });
             } else {
@@ -790,7 +798,7 @@
                         <img src="${p.logo}" alt="${p.name}">
                         <div class="project-info">
                             <div class="project-name">${filled ? `<span class="filled-check" title="${t('filled')}">✓</span>` : ''}${p.name}</div>
-                            ${calc.estimated ? '' : `<div class="tbd-badge">${t('tbd')}</div>`}
+                            ${!calc.estimated ? `<div class="tbd-badge">${t('tbd')}</div>` : p.guess ? `<div class="tbd-badge">${t('est')}</div>` : ''}
                             <a href="${p.trade}" target="_blank" rel="noopener noreferrer" class="trade-btn">${t('trade')}</a>
                         </div>
                     </td>
